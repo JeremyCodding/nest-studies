@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  //   HttpException,
+  //   HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Message } from './entities/message.entity';
 
 @Injectable()
@@ -20,7 +25,12 @@ export class MessagesService {
   }
 
   findOne(id: string) {
-    return this.messages.find((message) => message.id === +id);
+    const message = this.messages.find((message) => message.id === +id);
+
+    if (message) return message;
+
+    // throw new HttpException('Message Not Found', HttpStatus.NOT_FOUND);
+    throw new NotFoundException('Message Not Found');
   }
 
   create(body: any) {
@@ -41,6 +51,12 @@ export class MessagesService {
       (message) => message.id === +id,
     );
 
+    if (messageFound < 0) {
+      throw new NotFoundException(
+        `We couldn't find a message with the ID: ${id}`,
+      );
+    }
+
     if (messageFound >= 0) {
       const messageToUpdate = this.messages[messageFound];
 
@@ -54,12 +70,18 @@ export class MessagesService {
   }
 
   remove(id: string) {
-    const foundMessage = this.messages.findIndex(
+    const messageFound = this.messages.findIndex(
       (message) => message.id === +id,
     );
 
-    if (foundMessage >= 0) {
-      this.messages.splice(foundMessage, 1);
+    if (messageFound < 0) {
+      throw new NotFoundException(
+        `We couldn't find a message with the ID: ${id}`,
+      );
+    }
+
+    if (messageFound >= 0) {
+      this.messages.splice(messageFound, 1);
       return `Message with ID ${id} deleted`;
     }
 
