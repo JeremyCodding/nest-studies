@@ -11,6 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { MessagesService } from './messages.service';
+import { Message } from './entities/message.entity';
 
 @Controller('messages')
 export class MessagesController {
@@ -22,35 +23,27 @@ export class MessagesController {
     const { limit = 10, offset = 0 } = pagination;
     console.log(limit, offset);
     // return `Returns all messages. Limit: ${limit}, Offset: ${offset}`;
-    return this.messagesService.hello();
+    return this.messagesService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     console.log(id);
-    return `Return a specific message ID ${id}`;
+    return this.messagesService.findOne(id);
   }
 
   @Post()
-  create(@Body() body: { message: string; user: string }) {
-    return `This route creates a message for ${body.user}:
-    ${body.message}
-    `;
+  create(@Body() body: Message) {
+    return this.messagesService.create(body);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() body: { message?: string; user?: string },
-  ) {
-    return {
-      id,
-      ...body,
-    };
+  update(@Param('id') id: string, @Body() body: Partial<Message>) {
+    return this.messagesService.update(id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `Deleted message with ID: ${id}`;
+    return this.messagesService.remove(id);
   }
 }

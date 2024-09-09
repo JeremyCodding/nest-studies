@@ -15,21 +15,27 @@ POST {{baseUrl}}/messages/
 Content-Type: application/json
 
 {
-    "message":"This is a test message",
-    "user":"Jeremy"
-}
+    "text": "Test message",
+    "from": "Jeremy",
+    "to": "Joana",
+    "read": false,
+    "date": "2024-09-09T12:13:41.039Z"
+  }
 
 ### Update a message
-PATCH {{baseUrl}}/messages/1
+PATCH {{baseUrl}}/messages/2
 Content-Type: application/json
 
 {
-    "message":"This is an updated test message",
-    "user":"Jeremy"
-}
+    "text": "Updated message",
+    "from": "Joana",
+    "to": "Jeremy",
+    "read": false,
+    "date": "2024-09-09T12:13:41.039Z"
+  }
 
 ### Deletes a message
-DELETE {{baseUrl}}/messages/1
+DELETE {{baseUrl}}/messages/2
 
 
 
