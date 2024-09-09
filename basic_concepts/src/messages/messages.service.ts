@@ -73,9 +73,9 @@ export class MessagesService {
     return `It wasn't possible to find a message with ID: ${id}`;
   }
 
-  remove(id: string) {
+  remove(id: number) {
     const messageFound = this.messages.findIndex(
-      (message) => message.id === +id,
+      (message) => message.id === id,
     );
 
     if (messageFound < 0) {

@@ -4,7 +4,13 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // Remove keys that are not in the DTO
+      forbidNonWhitelisted: true, // Throws an error if there are non existant keys
+      transform: false, // Transforms params in the DTO types
+    }),
+  );
   await app.listen(3000);
 }
 bootstrap();
