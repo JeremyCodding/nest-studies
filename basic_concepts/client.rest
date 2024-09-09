@@ -2,7 +2,9 @@
 
 # MESSAGES
 ### Get all
-GET {{baseUrl}}/messages
+GET {{baseUrl}}/messages/
+?limit=100
+&offset=10
 
 ### Get one
 GET {{baseUrl}}/messages/1
@@ -16,6 +18,21 @@ Content-Type: application/json
     "message":"This is a test message",
     "user":"Jeremy"
 }
+
+### Update a message
+PATCH {{baseUrl}}/messages/1
+Content-Type: application/json
+
+{
+    "message":"This is an updated test message",
+    "user":"Jeremy"
+}
+
+### Deletes a message
+DELETE {{baseUrl}}/messages/1
+
+
+
 
 ### AppControllerGetHello
 
