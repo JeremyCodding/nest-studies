@@ -30,8 +30,7 @@ export class MessagesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log(id);
-    return this.messagesService.findOne(id);
+    return this.messagesService.findOne(+id);
   }
 
   @Post()
