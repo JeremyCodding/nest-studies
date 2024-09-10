@@ -17,7 +17,6 @@ export class MessagesService {
     private readonly messageRepository: Repository<Message>,
   ) {}
 
-  private lastId = 1;
   private messages: Message[] = [
     {
       id: 1,
@@ -47,60 +46,42 @@ export class MessagesService {
     throw new NotFoundException('Message Not Found');
   }
 
-  create(body: CreateMessageDto) {
-    this.lastId++;
-    const id = this.lastId;
+  async create(body: CreateMessageDto) {
     const newMessage = {
-      id,
       ...body,
       read: false,
       date: new Date(),
     };
 
-    this.messages.push(newMessage);
+    const message = await this.messageRepository.create(newMessage);
 
-    return newMessage;
+    return this.messageRepository.save(message);
   }
 
-  update(id: string, body: UpdateMessageDto) {
-    const messageFound = this.messages.findIndex(
-      (message) => message.id === +id,
-    );
+  async update(id: number, body: UpdateMessageDto) {
+    const partialUpdatedMessage = {
+      read: body?.read,
+      text: body?.text,
+    };
+    const message = await this.messageRepository.preload({
+      id,
+      ...partialUpdatedMessage,
+    });
 
-    if (messageFound < 0) {
-      throw new NotFoundException(
-        `We couldn't find a message with the ID: ${id}`,
-      );
+    if (message) {
+      const updatedMessage = await this.messageRepository.save(message);
+
+      return updatedMessage;
     }
 
-    if (messageFound >= 0) {
-      const messageToUpdate = this.messages[messageFound];
-
-      return (this.messages[messageFound] = {
-        ...messageToUpdate,
-        ...body,
-      });
-    }
-
-    return `It wasn't possible to find a message with ID: ${id}`;
+    throw new NotFoundException('Message Not Found');
   }
 
-  remove(id: number) {
-    const messageFound = this.messages.findIndex(
-      (message) => message.id === id,
-    );
+  async remove(id: number) {
+    const message = await this.messageRepository.findOneBy({ id });
 
-    if (messageFound < 0) {
-      throw new NotFoundException(
-        `We couldn't find a message with the ID: ${id}`,
-      );
-    }
+    if (message) return this.messageRepository.remove(message);
 
-    if (messageFound >= 0) {
-      this.messages.splice(messageFound, 1);
-      return `Message with ID ${id} deleted`;
-    }
-
-    return `We couldn't find a message with ID: ${id}`;
+    throw new NotFoundException('Message Not Found');
   }
 }

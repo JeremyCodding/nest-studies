@@ -7,7 +7,7 @@ GET {{baseUrl}}/messages/
 &offset=10
 
 ### Get one
-GET {{baseUrl}}/messages/1
+GET {{baseUrl}}/messages/2
 
 ### 
 # @name CreateMessage
@@ -21,15 +21,12 @@ Content-Type: application/json
 }
 
 ### Update a message
-PATCH {{baseUrl}}/messages/2
+PATCH {{baseUrl}}/messages/4
 Content-Type: application/json
 
 {
-    "text": "Updated message",
-    "from": "Joana",
-    "to": "Jeremy",
-    "read": false,
-    "date": "2024-09-09T12:13:41.039Z"
+    "text": "Updated message again",
+    "read": false
   }
 
 ### Deletes a message
