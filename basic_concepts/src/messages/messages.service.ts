@@ -17,17 +17,6 @@ export class MessagesService {
     private readonly messageRepository: Repository<Message>,
   ) {}
 
-  private messages: Message[] = [
-    {
-      id: 1,
-      text: 'Test message',
-      from: 'Joana',
-      to: 'Jeremy',
-      read: false,
-      date: new Date(),
-    },
-  ];
-
   async findAll() {
     const messages = await this.messageRepository.find();
     return messages;
