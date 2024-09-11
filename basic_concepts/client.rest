@@ -33,6 +33,28 @@ Content-Type: application/json
 DELETE {{baseUrl}}/messages/2
 
 
+# USERS
+### Get all
+GET {{baseUrl}}/users/
+
+### Get one
+GET {{baseUrl}}/users/2
+
+### Create
+# @name CreateUser
+POST {{baseUrl}}/users/
+Content-Type: application/json
+
+{
+    "email": "luciana.dantaspaula@gmail.com",
+    "name": "Luciana",
+    "password": "123456"
+}
+
+
+
+
+
 
 
 ### AppControllerGetHello
