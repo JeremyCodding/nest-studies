@@ -15,9 +15,9 @@ POST {{baseUrl}}/messages/
 Content-Type: application/json
 
 {
-    "text": "Test message",
-    "from": "Jeremy",
-    "to": "Joana"
+    "text": "Nouros",
+    "fromId": 9,
+    "toId": 10
 }
 
 ### Update a message
@@ -46,8 +46,8 @@ POST {{baseUrl}}/users/
 Content-Type: application/json
 
 {
-    "email": "luciana.dantaspaula@gmail.com",
-    "name": "Luciana",
+    "email": "jeremy.paulepereira@gmail.com",
+    "name": "Jeremy",
     "password": "123456"
 }
 

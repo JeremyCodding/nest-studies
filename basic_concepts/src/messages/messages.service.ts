@@ -9,16 +9,33 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
+    private readonly usersService: UsersService,
   ) {}
 
   async findAll() {
-    const messages = await this.messageRepository.find();
+    const messages = await this.messageRepository.find({
+      relations: ['from', 'to'],
+      order: {
+        id: 'desc',
+      },
+      select: {
+        from: {
+          id: true,
+          nome: true,
+        },
+        to: {
+          id: true,
+          nome: true,
+        },
+      },
+    });
     return messages;
   }
 
@@ -26,6 +43,20 @@ export class MessagesService {
     const message = await this.messageRepository.findOne({
       where: {
         id,
+      },
+      relations: ['from', 'to'],
+      order: {
+        id: 'desc',
+      },
+      select: {
+        from: {
+          id: true,
+          nome: true,
+        },
+        to: {
+          id: true,
+          nome: true,
+        },
       },
     });
 
@@ -36,15 +67,32 @@ export class MessagesService {
   }
 
   async create(body: CreateMessageDto) {
+    const { fromId, toId } = body;
+
+    const from = await this.usersService.findOne(fromId);
+    const to = await this.usersService.findOne(toId);
+
     const newMessage = {
-      ...body,
+      text: body.text,
+      from,
+      to,
       read: false,
       date: new Date(),
     };
 
     const message = await this.messageRepository.create(newMessage);
 
-    return this.messageRepository.save(message);
+    await this.messageRepository.save(message);
+
+    return {
+      ...message,
+      from: {
+        id: message.from.id,
+      },
+      to: {
+        id: message.to.id,
+      },
+    };
   }
 
   async update(id: number, body: UpdateMessageDto) {
