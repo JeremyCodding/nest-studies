@@ -52,14 +52,13 @@ Content-Type: application/json
 }
 
 
-### Update a message
-PATCH {{baseUrl}}/users/4
+### Update an user
+PATCH {{baseUrl}}/users/9
 Content-Type: application/json
 
 {
-    "email": "luciana.dantaspaula@gmail.com",
-    "name": "Luciana",
-    "password": "123456"
+    "name": "Lucifanyas",
+    "password": "654321"
   }
 
 

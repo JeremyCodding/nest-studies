@@ -44,12 +44,34 @@ export class UsersService {
     return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.userRepository.findOneBy({
+      id,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userData = {
+      nome: updateUserDto.name,
+      passwordHash: updateUserDto.password,
+    };
+
+    const user = await this.userRepository.preload({
+      id,
+      ...userData,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.save(user);
   }
 
   async remove(id: number) {
