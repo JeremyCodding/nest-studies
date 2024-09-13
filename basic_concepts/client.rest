@@ -15,18 +15,18 @@ POST {{baseUrl}}/messages/
 Content-Type: application/json
 
 {
-    "text": "Eu sou idiota",
-    "fromId": 11,
-    "toId": 10
+    "text": "Fanyos",
+    "fromId": 10,
+    "toId": 9
 }
 
 ### Update a message
-PATCH {{baseUrl}}/messages/4
+PATCH {{baseUrl}}/messages/11
 Content-Type: application/json
 
 {
-    "text": "Updated message again",
-    "read": false
+    "text": "Updated to Fanyos again",
+    "read": true
   }
 
 ### Deletes a message
