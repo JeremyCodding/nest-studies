@@ -7,7 +7,7 @@ GET {{baseUrl}}/messages/
 &offset=10
 
 ### Get one
-GET {{baseUrl}}/messages/2
+GET {{baseUrl}}/messages/9
 
 ### 
 # @name CreateMessage
@@ -15,8 +15,8 @@ POST {{baseUrl}}/messages/
 Content-Type: application/json
 
 {
-    "text": "Nouros",
-    "fromId": 9,
+    "text": "Eu sou idiota",
+    "fromId": 11,
     "toId": 10
 }
 
@@ -46,8 +46,8 @@ POST {{baseUrl}}/users/
 Content-Type: application/json
 
 {
-    "email": "jeremy.paulepereira@gmail.com",
-    "name": "Jeremy",
+    "email": "higor.sarcovia@gmail.com",
+    "name": "Higor",
     "password": "123456"
 }
 
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 ### Delete
 # @name DeleteUser
-DELETE {{baseUrl}}/users/4
+DELETE {{baseUrl}}/users/11
 
 
 
