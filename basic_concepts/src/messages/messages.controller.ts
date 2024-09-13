@@ -22,7 +22,7 @@ export class MessagesController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async findAll(@Query() pagination: PaginationDto) {
+  async findAll(@Query() pagination?: PaginationDto) {
     // const { limit = 10, offset = 0 } = pagination;
     const messages = await this.messagesService.findAll(pagination);
 
