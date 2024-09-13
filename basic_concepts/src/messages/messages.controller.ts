@@ -14,6 +14,7 @@ import {
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('messages')
 export class MessagesController {
@@ -21,11 +22,12 @@ export class MessagesController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll(@Query() pagination: { limit: string; offset: string }) {
-    const { limit = 10, offset = 0 } = pagination;
-    console.log(limit, offset);
+  async findAll(@Query() pagination: PaginationDto) {
+    // const { limit = 10, offset = 0 } = pagination;
+    const messages = await this.messagesService.findAll(pagination);
+
     // return `Returns all messages. Limit: ${limit}, Offset: ${offset}`;
-    return this.messagesService.findAll();
+    return messages;
   }
 
   @Get(':id')
