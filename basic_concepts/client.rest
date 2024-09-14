@@ -3,11 +3,11 @@
 # MESSAGES
 ### Get all
 GET {{baseUrl}}/messages/
-?limit=100
-&offset=10
+?limit=10
+&offset=0
 
 ### Get one
-GET {{baseUrl}}/messages/9
+GET {{baseUrl}}/messages/11
 
 ### 
 # @name CreateMessage

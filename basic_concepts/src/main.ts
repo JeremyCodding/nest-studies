@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { ParseIntIdPipe } from './common/pipes/parse-int-id.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // Throws an error if there are non existant keys
       transform: false, // Transforms params in the DTO types
     }),
+    new ParseIntIdPipe(),
   );
   await app.listen(3000);
 }
