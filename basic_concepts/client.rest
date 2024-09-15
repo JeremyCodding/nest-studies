@@ -7,7 +7,7 @@ GET {{baseUrl}}/messages/
 &offset=0
 
 ### Get one
-GET {{baseUrl}}/messages/1
+GET {{baseUrl}}/messages/11
 
 ### 
 # @name CreateMessage
