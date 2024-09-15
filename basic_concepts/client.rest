@@ -5,6 +5,7 @@
 GET {{baseUrl}}/messages/
 ?limit=10
 &offset=0
+Authorization: Bearer 123456
 
 ### Get one
 GET {{baseUrl}}/messages/11
