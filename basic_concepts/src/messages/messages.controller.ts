@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -11,16 +10,17 @@ import {
   Post,
   Query,
   Req,
-  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
 import { Request } from 'express';
+import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 
-@UseInterceptors(AuthTokenInterceptor)
+// @UseInterceptors(AuthTokenInterceptor)
+@UseGuards(IsAdminGuard)
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
@@ -32,7 +32,7 @@ export class MessagesController {
     // const { limit = 10, offset = 0 } = pagination;
     const messages = await this.messagesService.findAll(pagination);
 
-    throw new BadRequestException('Bad Request');
+    // throw new BadRequestException('Bad Request');
     // return `Returns all messages. Limit: ${limit}, Offset: ${offset}`;
     return messages;
   }

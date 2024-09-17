@@ -10,7 +10,6 @@ import { MessagesModule } from 'src/messages/messages.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { SimpleMiddleware } from 'src/common/middlewares/simple.middleware';
-import { OtherSimpleMiddleware } from 'src/common/middlewares/other-simple.middleware';
 import { APP_FILTER } from '@nestjs/core';
 import { MyExceptionFilter } from 'src/common/filters/my-exception.filter';
 
@@ -41,10 +40,6 @@ import { MyExceptionFilter } from 'src/common/filters/my-exception.filter';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(SimpleMiddleware).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
-    consumer.apply(OtherSimpleMiddleware).forRoutes({
       path: '*',
       method: RequestMethod.ALL,
     });
