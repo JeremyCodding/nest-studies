@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -31,6 +32,7 @@ export class MessagesController {
     // const { limit = 10, offset = 0 } = pagination;
     const messages = await this.messagesService.findAll(pagination);
 
+    throw new BadRequestException('Bad Request');
     // return `Returns all messages. Limit: ${limit}, Offset: ${offset}`;
     return messages;
   }
