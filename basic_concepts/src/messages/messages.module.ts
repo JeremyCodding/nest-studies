@@ -4,29 +4,30 @@ import { MessagesService } from './messages.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { UsersModule } from 'src/users/users.module';
-import { RemoveSpacesRegex } from 'src/common/regex/remove-spaces.regex';
-import { OnlyLowercaseLettersRegex } from 'src/common/regex/only-lowercase-letters.regex';
+import { RegexFactory } from 'src/common/regex/regex.factory';
 import {
   ONLY_LOWERCASE_LETTERS_REGEX,
   REMOVE_SPACES_REGEX,
-  SERVER_NAME,
 } from './messages.constants';
 
 @Module({
   controllers: [MessagesController],
   providers: [
     MessagesService,
+    RegexFactory,
     {
-      provide: SERVER_NAME,
-      useValue: 'My Name Is NestJS',
+      provide: REMOVE_SPACES_REGEX,
+      useFactory: (regexFactory: RegexFactory) => {
+        return regexFactory.create('RemoveSpacesRegex');
+      },
+      inject: [RegexFactory],
     },
     {
       provide: ONLY_LOWERCASE_LETTERS_REGEX,
-      useClass: OnlyLowercaseLettersRegex,
-    },
-    {
-      provide: REMOVE_SPACES_REGEX,
-      useClass: RemoveSpacesRegex,
+      useFactory: (regexFactory: RegexFactory) => {
+        return regexFactory.create('OnlyLowercaseLettersRegex');
+      },
+      inject: [RegexFactory],
     },
   ],
   imports: [TypeOrmModule.forFeature([Message]), UsersModule],
