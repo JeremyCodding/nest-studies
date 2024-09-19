@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Inject,
   Param,
   Patch,
   Post,
@@ -15,28 +14,15 @@ import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { RemoveSpacesRegex } from 'src/common/regex/remove-spaces.regex';
-import {
-  ONLY_LOWERCASE_LETTERS_REGEX,
-  REMOVE_SPACES_REGEX,
-} from './messages.constants';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(
-    private readonly messagesService: MessagesService,
-    @Inject(REMOVE_SPACES_REGEX)
-    private readonly removeSpacesRegex: RemoveSpacesRegex,
-    @Inject(ONLY_LOWERCASE_LETTERS_REGEX)
-    private readonly onlyLowercaseLetters: RemoveSpacesRegex,
-  ) {}
+  constructor(private readonly messagesService: MessagesService) {}
 
   @HttpCode(HttpStatus.OK)
   @Get()
   async findAll(@Query() pagination: PaginationDto) {
     const messages = await this.messagesService.findAll(pagination);
-    console.log(this.removeSpacesRegex.execute('REMOVE THE SPACES'));
-    console.log(this.onlyLowercaseLetters.execute('Remove The Spaces'));
 
     return messages;
   }

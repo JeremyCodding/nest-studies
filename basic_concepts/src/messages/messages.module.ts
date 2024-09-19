@@ -4,35 +4,18 @@ import { MessagesService } from './messages.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { UsersModule } from 'src/users/users.module';
-import { RegexFactory } from 'src/common/regex/regex.factory';
-import {
-  ONLY_LOWERCASE_LETTERS_REGEX,
-  REMOVE_SPACES_REGEX,
-} from './messages.constants';
+import { MyDynamicModule } from 'src/my-dynamic/my-dynamic.module';
 
 @Module({
   controllers: [MessagesController],
-  providers: [
-    MessagesService,
-    RegexFactory,
-    {
-      provide: REMOVE_SPACES_REGEX,
-      useFactory: (regexFactory: RegexFactory) => {
-        return regexFactory.create('RemoveSpacesRegex');
-      },
-      inject: [RegexFactory],
-    },
-    {
-      provide: ONLY_LOWERCASE_LETTERS_REGEX,
-      useFactory: async (regexFactory: RegexFactory) => {
-        console.log('Will wait promise resolve');
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('Promise was resolved');
-        return regexFactory.create('OnlyLowercaseLettersRegex');
-      },
-      inject: [RegexFactory],
-    },
+  providers: [MessagesService],
+  imports: [
+    TypeOrmModule.forFeature([Message]),
+    UsersModule,
+    MyDynamicModule.register({
+      apiKey: 'API_KEY',
+      apiUrl: 'http://apiUrl.com',
+    }),
   ],
-  imports: [TypeOrmModule.forFeature([Message]), UsersModule],
 })
 export class MessagesModule {}
