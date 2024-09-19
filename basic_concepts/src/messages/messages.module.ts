@@ -24,7 +24,10 @@ import {
     },
     {
       provide: ONLY_LOWERCASE_LETTERS_REGEX,
-      useFactory: (regexFactory: RegexFactory) => {
+      useFactory: async (regexFactory: RegexFactory) => {
+        console.log('Will wait promise resolve');
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('Promise was resolved');
         return regexFactory.create('OnlyLowercaseLettersRegex');
       },
       inject: [RegexFactory],
