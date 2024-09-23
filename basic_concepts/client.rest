@@ -54,12 +54,12 @@ Content-Type: application/json
 
 
 ### Update an user
-PATCH {{baseUrl}}/users/9
+PATCH {{baseUrl}}/users/10
 Content-Type: application/json
 
 {
-    "name": "Lucifanyas",
-    "password": "654321"
+    "name": "Jeremy",
+    "password": "123456"
   }
 
 
@@ -67,9 +67,15 @@ Content-Type: application/json
 # @name DeleteUser
 DELETE {{baseUrl}}/users/11
 
+#AUTH
+### Requests a login
+POST {{baseUrl}}/auth/
+Content-Type: application/json
 
-
-
+{
+  "email": "jeremy@gmail.com",
+  "password": "123456"
+}
 
 
 
