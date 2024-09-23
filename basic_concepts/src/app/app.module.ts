@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import appConfig from './app.config';
+import { AuthModule } from 'src/auth/auth.module';
 
 // {
 //   load: [appConfig],
@@ -43,6 +44,7 @@ import appConfig from './app.config';
     }),
     MessagesModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
