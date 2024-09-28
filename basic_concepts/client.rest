@@ -37,6 +37,7 @@ DELETE {{baseUrl}}/messages/2
 # USERS
 ### Get all
 GET {{baseUrl}}/users/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImplcmVteS5wYXVsZXBlcmVpcmFAZ21haWwuY29tIiwiaWF0IjoxNzI3NTMzODIwLCJleHAiOjE3Mjc1Mzc0MjAsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJ9.qsCmWW7DIGvfkQUCcNdbhtFasIKuN0w3Du3avSMDB0A
 
 ### Get one
 GET {{baseUrl}}/users/2
