@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   //   HttpException,
   //   HttpStatus,
   Injectable,
@@ -11,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
 @Injectable()
 export class MessagesService {
@@ -70,12 +72,13 @@ export class MessagesService {
     throw new NotFoundException('Message Not Found');
   }
 
-  async create(body: CreateMessageDto) {
-    const { fromId, toId } = body;
+  async create(body: CreateMessageDto, tokenPayload: TokenPayloadDto) {
+    const { toId } = body;
 
-    const from = await this.usersService.findOne(fromId);
     const to = await this.usersService.findOne(toId);
 
+    const from = await this.usersService.findOne(tokenPayload.sub);
+    console.log(from);
     const newMessage = {
       text: body.text,
       from,
@@ -92,15 +95,27 @@ export class MessagesService {
       ...message,
       from: {
         id: message.from.id,
+        name: message.from.nome,
       },
       to: {
         id: message.to.id,
+        name: message.to.nome,
       },
     };
   }
 
-  async update(id: number, body: UpdateMessageDto) {
+  async update(
+    id: number,
+    body: UpdateMessageDto,
+    tokenPayload: TokenPayloadDto,
+  ) {
     const message = await this.findOne(id);
+
+    if (message.from.id !== tokenPayload.sub) {
+      throw new ForbiddenException(
+        "You can't update a message you didn't send",
+      );
+    }
 
     message.text = body?.text ?? message.text;
     message.read = body?.read ?? message.read;
@@ -110,8 +125,13 @@ export class MessagesService {
     return updatedMessage;
   }
 
-  async remove(id: number) {
-    const message = await this.messageRepository.findOneBy({ id });
+  async remove(id: number, tokenPayload: TokenPayloadDto) {
+    const message = await this.findOne(id);
+    if (message.from.id !== tokenPayload.sub) {
+      throw new ForbiddenException(
+        "You can't delete a message you didn't send",
+      );
+    }
 
     if (message) return this.messageRepository.remove(message);
 
