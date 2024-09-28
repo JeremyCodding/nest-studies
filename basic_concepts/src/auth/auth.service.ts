@@ -20,6 +20,44 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  private async signJwtAsync<T>(sub: number, expiresIn: number, payload?: T) {
+    return await this.jwtService.signAsync(
+      {
+        sub,
+        ...payload,
+      },
+      {
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn,
+      },
+    );
+  }
+
+  private async createTokens(user: User) {
+    const accessTokenPromise = this.signJwtAsync<Partial<User>>(
+      user.id,
+      this.jwtConfiguration.ttl,
+      { email: user.email },
+    );
+
+    const refreshTokenPromise = this.signJwtAsync(
+      user.id,
+      this.jwtConfiguration.jwtRefreshTtl,
+    );
+
+    const [accessToken, refreshToken] = await Promise.all([
+      accessTokenPromise,
+      refreshTokenPromise,
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
   async login(loginDto: LoginDto) {
     const user = await this.userRepository.findOneBy({
       email: loginDto.email,
@@ -38,39 +76,27 @@ export class AuthService {
       throw new UnauthorizedException('Email or Password are invalid.');
     }
 
-    const accessToken = await this.signJwtAsync<Partial<User>>(
-      user.id,
-      this.jwtConfiguration.ttl,
-      { email: user.email },
-    );
-
-    const refreshToken = await this.signJwtAsync(
-      user.id,
-      this.jwtConfiguration.jwtRefreshTtl,
-    );
-
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return this.createTokens(user);
   }
 
-  private async signJwtAsync<T>(sub: number, expiresIn: number, payload?: T) {
-    return await this.jwtService.signAsync(
-      {
-        sub,
-        ...payload,
-      },
-      {
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        secret: this.jwtConfiguration.secret,
-        expiresIn,
-      },
-    );
-  }
+  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
+    try {
+      const { sub } = await this.jwtService.verifyAsync(
+        refreshTokenDto.refreshToken,
+        this.jwtConfiguration,
+      );
 
-  refreshTokens(refreshTokenDto: RefreshTokenDto) {
-    return true;
+      const user = await this.userRepository.findOneBy({
+        id: sub,
+      });
+
+      if (!user) {
+        throw new Error('User not found!');
+      }
+
+      return this.createTokens(user);
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 }
