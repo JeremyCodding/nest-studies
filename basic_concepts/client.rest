@@ -42,6 +42,7 @@ Authorization: Bearer {{authToken}}
 
 ### Get one
 GET {{baseUrl}}/users/2
+Authorization: Bearer {{authToken}}
 
 ### Create
 # @name CreateUser
@@ -57,17 +58,19 @@ Content-Type: application/json
 
 ### Update an user
 PATCH {{baseUrl}}/users/10
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "name": "Jeremy",
+    "name": "Jeremy Paule",
     "password": "123456"
   }
 
 
 ### Delete
 # @name DeleteUser
-DELETE {{baseUrl}}/users/11
+DELETE {{baseUrl}}/users/12
+Authorization: Bearer {{authToken}}
 
 #AUTH
 ### Requests a login

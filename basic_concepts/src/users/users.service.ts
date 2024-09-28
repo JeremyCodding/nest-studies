@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,6 +11,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { HashingService } from 'src/auth/hashing/hashing.service';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
 @Injectable()
 export class UsersService {
@@ -66,7 +68,11 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    tokenPayload: TokenPayloadDto,
+  ) {
     const userData = {
       nome: updateUserDto.name,
     };
@@ -87,14 +93,22 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
+    if (user.id !== tokenPayload.sub) {
+      throw new ForbiddenException("You can't delete an user, but yourself!");
+    }
+
     return this.userRepository.save(user);
   }
 
-  async remove(id: number) {
+  async remove(id: number, tokenPayload: TokenPayloadDto) {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    if (user.id !== tokenPayload.sub) {
+      throw new ForbiddenException("You can't delete an user, but yourself!");
     }
 
     return this.userRepository.remove(user);
