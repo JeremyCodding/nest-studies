@@ -18,9 +18,6 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
-import { RoutePolicyGuard } from 'src/auth/guard/route-policy.guard';
-import { RoutePolicies } from 'src/auth/enum/route-policies.enum';
-import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 
 @Controller('messages')
 export class MessagesController {
@@ -39,8 +36,7 @@ export class MessagesController {
     return this.messagesService.findOne(id);
   }
 
-  @SetRoutePolicy(RoutePolicies.createMessage)
-  @UseGuards(AuthTokenGuard, RoutePolicyGuard)
+  @UseGuards(AuthTokenGuard)
   @Post()
   create(
     @Body() createMessageDTO: CreateMessageDto,
