@@ -52,9 +52,10 @@ POST {{baseUrl}}/users/
 Content-Type: application/json
 
 {
-    "email": "higor.sarcovia@gmail.com",
-    "name": "Higor",
-    "password": "123456"
+    "email": "alessandra.maia@gmail.com",
+    "name": "Ale",
+    "password": "123456",
+    "routePolicies": ["createMessage", "findaAllMessages"]
 }
 
 
