@@ -18,7 +18,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "text": "Fanyos",
+    "text": "Fanyos de praia",
     "toId": 9
 }
 

@@ -78,7 +78,6 @@ export class MessagesService {
     const to = await this.usersService.findOne(toId);
 
     const from = await this.usersService.findOne(tokenPayload.sub);
-    console.log(from);
     const newMessage = {
       text: body.text,
       from,

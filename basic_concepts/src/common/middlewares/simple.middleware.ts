@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from 'express';
 
 export class SimpleMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    console.log('Simple Middleware');
     const authorization = req.headers?.authorization;
 
     if (authorization) {
@@ -21,10 +20,6 @@ export class SimpleMiddleware implements NestMiddleware {
 
     next();
 
-    console.log('End of first middleware');
-
-    res.on('finish', () => {
-      console.log('Connection Ended');
-    });
+    res.on('finish', () => {});
   }
 }

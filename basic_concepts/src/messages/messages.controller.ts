@@ -19,17 +19,15 @@ import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import { RoutePolicyGuard } from 'src/auth/guard/route-policy.guard';
-import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 import { RoutePolicies } from 'src/auth/enum/route-policies.enum';
+import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
 
-@UseGuards(RoutePolicyGuard)
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  @SetRoutePolicy(RoutePolicies.findaAllMessages)
   async findAll(@Query() pagination: PaginationDto) {
     const messages = await this.messagesService.findAll(pagination);
 
@@ -41,12 +39,22 @@ export class MessagesController {
     return this.messagesService.findOne(id);
   }
 
-  @UseGuards(AuthTokenGuard)
+  @SetRoutePolicy(RoutePolicies.createMessage)
+  @UseGuards(AuthTokenGuard, RoutePolicyGuard)
   @Post()
   create(
     @Body() createMessageDTO: CreateMessageDto,
     @TokenPayloadParam() tokenPayload: TokenPayloadDto,
-  ) {
+  ): Promise<{
+    from: { id: number; name: string };
+    to: { id: number; name: string };
+    id: number;
+    text: string;
+    read: boolean;
+    date: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+  }> {
     return this.messagesService.create(createMessageDTO, tokenPayload);
   }
 
