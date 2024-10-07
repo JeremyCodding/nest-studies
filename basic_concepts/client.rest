@@ -107,3 +107,6 @@ Content-Type: image/jpg
 
 < ./dev/images/picture.jpg
 ------BoundaryHTTP--
+
+### SEE PICTURE
+GET {{baseUrl}}/pictures/10.jpg

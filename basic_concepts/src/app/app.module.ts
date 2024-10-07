@@ -7,6 +7,8 @@ import { UsersModule } from 'src/users/users.module';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import appConfig from './app.config';
 import { AuthModule } from 'src/auth/auth.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 // {
 //   load: [appConfig],
@@ -41,6 +43,10 @@ import { AuthModule } from 'src/auth/auth.module';
           synchronize: appConfigurations.database.synchronize,
         };
       },
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, '..', '..', 'pictures'),
+      serveRoot: '/pictures',
     }),
     MessagesModule,
     UsersModule,
