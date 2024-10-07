@@ -102,8 +102,8 @@ Authorization: Bearer {{authToken}}
 Content-Type: multipart/form-data; boundary=----BoundaryHTTP
 
 ------BoundaryHTTP
-Content-Disposition: form-data; name="file"; filename="picture.jgp"
-Content-Type: image/jpeg
+Content-Disposition: form-data; name="file"; filename="picture.jpg"
+Content-Type: image/jpg
 
 < ./dev/images/picture.jpg
 ------BoundaryHTTP--
