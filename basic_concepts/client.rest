@@ -93,3 +93,17 @@ Content-Type: application/json
 {
   "refreshToken": "{{refreshToken}}"
 }
+
+
+#FILE UPLOAD
+### User Picture
+POST {{baseUrl}}/users/upload-picture/
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----BoundaryHTTP
+
+------BoundaryHTTP
+Content-Disposition: form-data; name="file"; filename="picture.jgp"
+Content-Type: image/jpeg
+
+< ./dev/images/picture.jpg
+------BoundaryHTTP--
