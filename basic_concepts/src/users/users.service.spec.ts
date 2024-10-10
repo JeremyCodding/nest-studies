@@ -75,5 +75,15 @@ describe('UserServices', () => {
         ConflictException,
       );
     });
+
+    it('should return an unkown exception', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockRejectedValue(new Error('Generic Error'));
+
+      await expect(usersService.create({} as any)).rejects.toThrow(
+        new Error('Generic Error'),
+      );
+    });
   });
 });
