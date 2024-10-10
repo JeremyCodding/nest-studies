@@ -107,7 +107,7 @@ describe('UserServices', () => {
       expect(result).toEqual(userFound);
     });
 
-    it('should return an user if user exists', async () => {
+    it('should return an error if user does not exists', async () => {
       const userId = 1;
 
       await expect(usersService.findOne(userId)).rejects.toThrow(
