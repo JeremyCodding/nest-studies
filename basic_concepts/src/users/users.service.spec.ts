@@ -5,7 +5,7 @@ import { HashingService } from 'src/auth/hashing/hashing.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 describe('UserServices', () => {
   let usersService: UsersService;
@@ -21,6 +21,7 @@ describe('UserServices', () => {
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
+            findOneBy: jest.fn(),
           },
         },
         {
@@ -83,6 +84,34 @@ describe('UserServices', () => {
 
       await expect(usersService.create({} as any)).rejects.toThrow(
         new Error('Generic Error'),
+      );
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return an user if user exists', async () => {
+      const userId = 1;
+      const userFound = {
+        id: userId,
+        nome: 'Jeremy',
+        email: 'jeremy@gmail.com',
+        passwordHash: '123456',
+      };
+
+      jest
+        .spyOn(userRepository, 'findOneBy')
+        .mockResolvedValue(userFound as any);
+
+      const result = await usersService.findOne(userId);
+
+      expect(result).toEqual(userFound);
+    });
+
+    it('should return an user if user exists', async () => {
+      const userId = 1;
+
+      await expect(usersService.findOne(userId)).rejects.toThrow(
+        new NotFoundException('User not found'),
       );
     });
   });
